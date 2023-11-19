@@ -24,7 +24,6 @@ connection = MySQLdb.connect(
   ssl_mode="VERIFY_IDENTITY",
   # See https://planetscale.com/docs/concepts/secure-connections#ca-root-configuration
   # to determine the path to your operating systems certificate file.
-  # NOTE: Right now assume that you are using linux   
   ssl={ "ca": "/etc/ssl/certs/ca-certificates.crt" }
 )
 
