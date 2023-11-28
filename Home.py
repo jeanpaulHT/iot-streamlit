@@ -1,30 +1,22 @@
 import streamlit as st
 import pandas as pd
 import numpy as np
+from utils.dbmanager import DBConnection
+# from utils.configvars import views, devices
+from view import views_dict
 
-from config.configvars import *
-
-st.title('Uber pickups in NYC')
+st.title('Terrarium DashBoard')
 
 
+dbconn = DBConnection()
+view = st.selectbox("Select view", views_dict.keys() , index= 1)
+
+def get_devices(device_type:str):
+  query = f"SELECT * FROM data_{device_type.lower()}"
+  df = dbconn.execute_read_query(query)
+  return df
 
 
-# Load environment variables from the .env file
-import MySQLdb
-
-print(DATABASE_HOST, DATABASE_USERNAME, DATABASE_PASSWORD, DATABASE)
-
-# Connect to the database
-connection = MySQLdb.connect(
-  host= DATABASE_HOST,
-  user= DATABASE_USERNAME,
-  passwd= DATABASE_PASSWORD,
-  db= DATABASE,
-  autocommit=True,
-  ssl_mode="VERIFY_IDENTITY",
-  # See https://planetscale.com/docs/concepts/secure-connections#ca-root-configuration
-  # to determine the path to your operating systems certificate file.
-  ssl={ "ca": "/etc/ssl/certs/ca-certificates.crt" }
-)
-
+if view is not None:
+  views_dict[view](dbconn)
 
